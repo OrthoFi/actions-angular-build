@@ -50,7 +50,7 @@ runs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        repository: {{ inputs.repository }}
+        repository: ${{ inputs.repository }}
         fetch-depth: 0
 
     - name: Get App Config
@@ -62,6 +62,7 @@ runs:
         file: .env
 
     - name: Set environment name
+      shell: bash
       run: |
         echo "" >> .env
         echo "APP_ENV_NAME=$APP_ENV_NAME" >> .env
@@ -70,6 +71,7 @@ runs:
       uses: orthofi/actions-prepare-angular@v1
 
     - name: Build
+      shell: bash
       run: npm run build
 
     - name: Add build info
