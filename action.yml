@@ -12,9 +12,6 @@ inputs:
     description: 'Where are we deploying this?'
     required: true
     default: 'None'
-  gha-build-token:
-    description: 'The GitHub Actions build token as a parameter. Typically would be BUILD_GITHUB_TOKEN'
-    required: true
   build-role-dev:
     description: 'The relevant dev build role for AWS stuff.'
     required: true
@@ -29,9 +26,6 @@ inputs:
     required: true
   aws-region:
     description: 'Regionality of the AWS credentialing'
-    required: true
-  aws-role:
-    description: 'Who are we acting as with our AWS credentials?'
     required: true
 
 runs:
@@ -51,7 +45,7 @@ runs:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
         aws-region: ${{ inputs.aws-region }}
-        role-to-assume: ${{ inputs.aws-role }}
+        role-to-assume: ${{ steps.set-role.outputs.build-role }}
 
     - name: Checkout
       uses: actions/checkout@v2
