@@ -12,11 +12,11 @@ inputs:
     description: 'Where are we deploying this?'
     required: true
     default: 'None'
-  build-role-dev:
+  aws-role-dev:
     description: 'The relevant dev build role for AWS stuff.'
     required: true
-  build-role-prod:
-    description: 'The relevant production build role for AWS stuff.'
+  aws-role-prod:
+    description: 'The relevant prod build role for AWS stuff.'
     required: true
   aws-access-key-id:
     description: 'AWS access key!'
@@ -36,7 +36,7 @@ runs:
       uses: orthofi/actions-set-build-role@v1
       with:
         production-role: ${{ inputs.build-role-prod }}
-        dev-role: ${{ inputs.build-role-dev }}
+        dev-role: ${{ inputs.aws-role-dev }}
         environment-name: ${{ inputs.target-environment }}
 
     - name: Configure AWS Credentials
@@ -45,7 +45,7 @@ runs:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
         aws-region: ${{ inputs.aws-region }}
-        role-to-assume: ${{ steps.set-role.outputs.build-role }}
+        role-to-assume: ${{ inputs.aws-role-prod }}
 
     - name: Checkout
       uses: actions/checkout@v2
