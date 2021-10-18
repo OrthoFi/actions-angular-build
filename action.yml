@@ -72,7 +72,13 @@ runs:
 
     - name: Build
       shell: bash
-      run: npm run build
+      run: |
+        if [${{ inputs.app-name }} == 'team' || ${{ inputs.app-name }} == 'practice' || ${{ inputs.app-name }} == 'patient' ]; then 
+        echo "Running npm build with Old OrthoFi Angular's configuration override"
+        npm run build -- --configuration=${{ inputs.target-environment }}
+        else
+        npm run build
+        fi
 
     - name: Add build info
       uses: orthofi/actions-angular-build-info@v1
