@@ -73,7 +73,7 @@ runs:
     - name: Build
       shell: pwsh
       run: >
-        if ('${{ inputs.app-name }}' -eq 'team' -or '${{ inputs.app-name }}' -eq 'practice')
+        if ('${{ inputs.app-name }}' -eq 'team' -or '${{ inputs.app-name }}' -eq 'patient')
         {
           Write-Output "Running npm build with Angular configuration override for old frontend projects"
           npm run build -- --configuration=${{ inputs.target-environment }}
