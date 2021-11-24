@@ -72,7 +72,7 @@ runs:
 
     - name: Build
       shell: pwsh
-      run: node_modules/@angular/cli/bin/ng build --configuration=${{ inputs.target-environment }}
+      run: npm run ci-build -- --configuration=${{ inputs.target-environment }}
 
     - name: Add build info
       uses: orthofi/actions-angular-build-info@v1
