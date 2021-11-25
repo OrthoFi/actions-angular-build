@@ -1,31 +1,31 @@
-name: 'Build Angular'
-description: 'Build an Angular application. Intended to be used in conjunction with -deploy, and -test.'
+name: "Build Angular"
+description: "Build an Angular application. Intended to be used in conjunction with -deploy, and -test."
 
 inputs:
   repository:
-    description: 'Which Angular repository are we building?'
+    description: "Which Angular repository are we building?"
     required: true
   app-name:
-    description: 'App name. Used for param store lookups.'
+    description: "App name. Used for param store lookups."
     required: true
   target-environment:
-    description: 'Where are we deploying this?'
+    description: "Where are we deploying this?"
     required: true
-    default: 'None'
+    default: "None"
   aws-role-dev:
-    description: 'The relevant dev build role for AWS stuff.'
+    description: "The relevant dev build role for AWS stuff."
     required: true
   aws-role-prod:
-    description: 'The relevant prod build role for AWS stuff.'
+    description: "The relevant prod build role for AWS stuff."
     required: true
   aws-access-key-id:
-    description: 'AWS access key!'
+    description: "AWS access key!"
     required: true
   aws-secret-access-key:
-    description: 'AWS access key, but more secreter!'
+    description: "AWS access key, but more secreter!"
     required: true
   aws-region:
-    description: 'Regionality of the AWS credentialing'
+    description: "Regionality of the AWS credentialing"
     required: true
 
 runs:
@@ -56,7 +56,7 @@ runs:
     - name: Get App Config
       uses: orthofi/actions-aws-ssm-get-by-path@v1
       with:
-        paths: ${{ format('/app/{0}/env/{1}/', inputs.app-name, inputs.target-environment) }}
+        paths: ${{ format('/app/{0}/,/app/{0}/env/{1}/', inputs.app-name, inputs.target-environment) }}
         save-to-environment: true
         prefix: APP_
         file: .env
