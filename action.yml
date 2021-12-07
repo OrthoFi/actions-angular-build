@@ -27,6 +27,9 @@ inputs:
   aws-region:
     description: "Regionality of the AWS credentialing"
     required: true
+  node-version:
+    description: "Version of Node! Use 14.x for older stuff."
+    required: true
 
 runs:
   using: "composite"
@@ -66,6 +69,11 @@ runs:
       run: |
         echo "" >> .env
         echo "APP_ENV_NAME=$APP_ENV_NAME" >> .env
+
+    - name: Set Node Version
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ inputs.node-version }}
 
     - name: Prepare Angular
       uses: orthofi/actions-prepare-angular@v1
