@@ -1,38 +1,32 @@
-name: "Build Angular"
-description: "Build an Angular application. Intended to be used in conjunction with -deploy, and -test."
+name: Build Angular
+description: Build an Angular application. Intended to be used in conjunction with -deploy, and -test.
 
 inputs:
-  repository:
-    description: "Which Angular repository are we building?"
-    required: true
   app-name:
-    description: "App name. Used for param store lookups."
+    description: App name. Used for param store lookups.
     required: true
   target-environment:
-    description: "Where are we deploying this?"
-    required: true
-    default: "None"
+    description: Where are we deploying this?
+    required: false
   aws-role-dev:
-    description: "The relevant dev build role for AWS stuff."
+    description: The relevant dev build role for AWS stuff.
     required: true
   aws-role-prod:
-    description: "The relevant prod build role for AWS stuff."
+    description: The relevant prod build role for AWS stuff.
     required: true
   aws-access-key-id:
-    description: "AWS access key!"
+    description: AWS access key!
     required: true
   aws-secret-access-key:
-    description: "AWS access key, but more secreter!"
+    description: AWS access key, but more secreter!
     required: true
   aws-region:
-    description: "Regionality of the AWS credentialing"
+    description: Regionality of the AWS credentialing
     required: true
-  node-version:
-    description: "Version of Node! Use 14.x for older stuff."
-    required: true
+    default: us-east-1
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Set Build Role
       id: set-role
@@ -49,13 +43,6 @@ runs:
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
         aws-region: ${{ inputs.aws-region }}
         role-to-assume: ${{ steps.set-role.outputs.build-role }}
-
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        repository: ${{ inputs.repository }}
-        ref: ${{ github.ref }}
-        fetch-depth: 0
 
     - name: Get App Config
       uses: orthofi/actions-aws-ssm-get-by-path@v1
@@ -77,20 +64,11 @@ runs:
         node-version: ${{ inputs.node-version }}
 
     - name: Prepare Angular
-      uses: orthofi/actions-prepare-angular@v1
+      uses: orthofi/actions-install-node-dependencies@v1
 
     - name: Build
       shell: pwsh
-      run: >
-        if ('${{ inputs.app-name }}' -eq 'team' -or '${{ inputs.app-name }}' -eq 'patient')
-        {
-          Write-Output "Running npm build with Angular configuration override for old frontend projects"
-          npm run build -- --configuration=${{ inputs.target-environment }}
-        } 
-        else
-        {
-          npm run build
-        }
+      run: npm run ci-build
 
     - name: Add build info
       uses: orthofi/actions-angular-build-info@v1
